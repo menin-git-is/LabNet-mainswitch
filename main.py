@@ -5,15 +5,9 @@ import requests
 import RPi.GPIO as GPIO
 import time
 
-print sys.argv
-
-if ( sys.argv[1] != "start" ):
-  print "this is not a startup, gonna exit"
-  sys.exit()
-
 switch_pin = 14
 switch_delay = 0.5
-prev_input = 0
+prev_input = -1
 labnet_url = "http://labnet.lab.flka.de"
 
 GPIO.setmode(GPIO.BCM)
@@ -30,6 +24,7 @@ while True:
   input = GPIO.input(switch_pin)  
   if ( prev_input != input ):
     toggle_lab(input)
-  prev_input = input
+    prev_input = input
   time.sleep(switch_delay)
+
 
