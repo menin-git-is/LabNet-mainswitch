@@ -18,26 +18,35 @@ DAEMON=$DIR/main.py
 DAEMON_NAME=labnet-mainswitch
  
 # Add any command line options for your daemon here
-DAEMON_OPTS=""
- 
+DAEMON_ARGS=""
+
 # This next line determines what user the script runs as.
 # Root generally not recommended but necessary if you are using the Raspberry Pi GPIO from Python.
 DAEMON_USER=root
  
 # The process ID of the script when it runs is stored here:
 PIDFILE=/var/run/$DAEMON_NAME.pid
- 
+
+# The log file 
+LOG=/var/log/$DAEMON_NAME.log
+
 . /lib/lsb/init-functions
  
 do_start () {
     log_daemon_msg "Starting system $DAEMON_NAME daemon"
-    start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --chdir $DIR --startas $DAEMON -- $DAEMON_OPTS
+    create_log_file
+    start-stop-daemon --start --quiet --background --pidfile $PIDFILE --make-pidfile --chuid $DAEMON_USER --chdir $DIR --startas /bin/bash -- -c "exec $DAEMON $DAEMON_ARGS >> $LOG 2>&1"
     log_end_msg $?
 }
 do_stop () {
     log_daemon_msg "Stopping system $DAEMON_NAME daemon"
     start-stop-daemon --stop --pidfile $PIDFILE --retry 10
     log_end_msg $?
+}
+
+create_log_file () {
+    touch $LOG
+    chown $DAEMON_USER $LOG
 }
  
 case "$1" in
