@@ -8,7 +8,8 @@ import time
 switch_pin = 14
 switch_delay = 0.5
 prev_input = -1
-labnet_url = "http://labnet.lab.flka.de"
+labnet_url = "http://192.168.1.6"
+state_api_url = "http://192.168.1.6:3000"
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(switch_pin,GPIO.IN)
@@ -16,6 +17,11 @@ GPIO.setup(switch_pin,GPIO.IN)
 def query_api(arg):
   try:
     requests.get(labnet_url + "/api/" + arg)
+
+    if arg == "lab/on":
+      requests.post(state_api_url, json={"is_open":true}, headers={'clientId':'supersecret'})
+    else:
+      requests.post(state_api_url, json={"is_open":false}, headers={'clientId':'supersecret'})
   except requests.exceptions.RequestException as e:
     print "http request failed:"
     print e
