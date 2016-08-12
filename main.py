@@ -19,9 +19,9 @@ def query_api(arg):
     requests.get(labnet_url + "/api/" + arg)
 
     if arg == "lab/on":
-      requests.post(state_api_url, json={"is_open":true}, headers={'clientId':'supersecret'})
+      requests.post(state_api_url, json={"is_open":True}, headers={'clientId':'supersecret'})
     else:
-      requests.post(state_api_url, json={"is_open":false}, headers={'clientId':'supersecret'})
+      requests.post(state_api_url, json={"is_open":False}, headers={'clientId':'supersecret'})
   except requests.exceptions.RequestException as e:
     print "http request failed:"
     print e
