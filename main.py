@@ -47,10 +47,10 @@ logging.info("daemon started")
 while True:
   input = GPIO.input(switch_pin)  
   if ( prev_input != input ):
-    if(input_counter++ >= needed_inputs_to_change)
+    if(input_counter++ > needed_inputs_to_change):
       toggle_lab(input)
       prev_input = input
-  else
+  else:
     input_counter = 0
   time.sleep(switch_delay)
 
