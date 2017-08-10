@@ -45,6 +45,7 @@ class Buzzer:
 
         self.buzzing_state = state
         self.is_buzzing = state
+        self.buzz_off_divider = 1
 
     def update(self):
         """Buzzes the Buzzer in a certain interval"""
